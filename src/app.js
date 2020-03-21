@@ -9,6 +9,7 @@ import {
 } from './options.js'
 
 import {
+  startButton,
   replayButton,
   deathFilter,
   stayHomeFilter
@@ -23,6 +24,7 @@ import {
 
 let balls = []
 const matchMedia = window.matchMedia('(min-width: 800px)')
+let started=false;
 
 let isDesktop = matchMedia.matches
 
@@ -72,6 +74,9 @@ export const canvas = new window.p5(sketch => { // eslint-disable-line
       startBalls()
       resetValues()
     }
+    startButton.onclick = () => {
+      started = !started
+    }
 
     deathFilter.onclick = () => {
       RUN.filters.death = !RUN.filters.death
@@ -88,13 +93,15 @@ export const canvas = new window.p5(sketch => { // eslint-disable-line
   }
 
   sketch.draw = () => {
-    sketch.background('white')
-    balls.forEach(ball => {
-      ball.checkState()
-      ball.checkCollisions({ others: balls })
-      ball.move()
-      ball.render()
-    })
-    updateCount()
+    if (started==true) {
+      sketch.background('white')
+      balls.forEach(ball => {
+        ball.checkState()
+        ball.checkCollisions({ others: balls })
+        ball.move()
+        ball.render()
+      })
+      updateCount()
+    }
   }
 }, document.getElementById('canvas'))
